@@ -1,0 +1,25 @@
+GET http://localhost:3000/api/posts
+Content-Type: application/json
+
+###
+
+GET http://localhost:3000/api/posts/63c800daa6aa562a80b812e0
+Content-Type: application/json
+
+###
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+    "title":"Third",
+    "body":"Third post"
+}
+
+###
+PUT http://localhost:3000/api/posts/63c80199a6aa562a80b812e7
+Content-Type: application/json
+
+{
+    "title":"W4e",
+    "body":"Wakanda forever"
+}

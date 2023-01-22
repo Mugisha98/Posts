@@ -20,23 +20,31 @@ class PostController implements Controller {
         this.router.get(
             `${this.path}`,
             this.getAll);
-            
-        //Get one post
+
+        //get one post by id
         this.router.get(
             `${this.path}/:id`,
             this.getOne)
-
+       
         //Create a new post
         this.router.post(
             `${this.path}`, 
             validationMiddleware(validate.create), 
             this.create);
+
+        //Update a post
+        this.router.put(
+            `${this.path}/:id`,
+            validationMiddleware(validate.update),
+            this.update);    
     }
+
     //Get all posts
     private getAll = async (
         request: Request,
         response: Response,
-        next: NextFunction): Promise<void> => {
+        next: NextFunction
+        ): Promise<void> => {
         try {
             const posts = await this.PostService.getAll();
             response.status(200).json({ posts });
@@ -48,7 +56,8 @@ class PostController implements Controller {
     private getOne = async (
         request: Request,
         response: Response,
-        next: NextFunction): Promise<void> => {
+        next: NextFunction
+        ): Promise<void> => {
         try {
             const { id } = request.params;
             const post = await this.PostService.getOne(id);
@@ -61,17 +70,32 @@ class PostController implements Controller {
     private create = async (
         request: Request, 
         response: Response, 
-        next: NextFunction): Promise<void> => {
+        next: NextFunction
+        ): Promise<void> => {
         try {
             const { title, body } = request.body;
-            const createdPost = await this.PostService.create( title, body);
+            const createdPost = await this.PostService.create( title, body );
             response.status(201).json({ createdPost });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
     }
 
-    
+    //Update a post
+    private update = async (
+        request: Request,
+        response: Response,
+        next: NextFunction
+        ): Promise<void> => {
+        try {
+            const { _id } = request.params;
+            const { title, body } = request.body;
+            const updatedPost = await this.PostService.update(_id, title, body);
+            response.status(200).json({ updatedPost });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    }
 
 }
 

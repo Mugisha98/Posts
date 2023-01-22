@@ -49,11 +49,11 @@ class App {
         const {  MONGO_PATH } = process.env;
         //Connect to MongoDB atlas database
         if (!MONGO_PATH) {
-            throw new Error('Mongo path is not defined');
+            console.log('Mongo path is not defined');
         }
         mongoose.connect(`${MONGO_PATH}`).then(() => { 
             console.log('Connected to MongoDB');
-        });
+        })
     }
 
     public listen(): void {
