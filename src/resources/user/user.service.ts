@@ -35,10 +35,12 @@ class UserService {
             if( await user.isValidPassword(password)) {
                 return token.createToken(user);
             }else {
-                throw new Error("Invalid password");
+                throw new Error("Incorrect credentials");
             }
         } catch (error) {
             throw new Error("Unable to login");
         }
     }
 }
+
+export default UserService
