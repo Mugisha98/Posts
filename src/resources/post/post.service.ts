@@ -1,7 +1,5 @@
 import PostModel from '@/resources/post/post.model'
 import IPost from '@/resources/post/post.interface'
-import HttpException from '@/utils/exceptions/http.exception'
-import { ObjectId } from 'mongoose';
 
 class PostService {
     private post = PostModel;
@@ -20,14 +18,10 @@ class PostService {
     /*
         Get one post
     */
-    public getOne = async (_id: string) => {
+    public getOne = async (_id: string ): Promise<IPost> => {
         try {
             const post = await this.post.findOne({ _id });
-            if(post){
-                console.log("Post: ", post);
-            }
-
-            return null;
+            return post!;
         } catch (error) {
             throw new Error("Unable to get the post");
         }
@@ -57,10 +51,26 @@ class PostService {
         ): Promise<IPost> => {
         try {
             const post = await this.post.findByIdAndUpdate(_id, { title, body}, { new: true });
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return post!;
+            return post!; // ! is used to tell the compiler that the post is not null
         } catch (error) {
             throw new Error("Unable to update the post");
+        }
+    }
+
+    /*
+        Delete a post
+    */
+    public delete = async (_id: string): Promise<IPost> => {
+        try {
+            const post = await this.post.findById(_id);
+            if(post) {
+                await post.remove();
+                return post;
+            }else {
+                throw new Error("Post not found");
+            }   
+        }catch (error) {
+            throw new Error("Unable to delete the post");
         }
     }
 

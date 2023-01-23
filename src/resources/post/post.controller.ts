@@ -23,7 +23,7 @@ class PostController implements Controller {
 
         //get one post by id
         this.router.get(
-            `${this.path}/:id`,
+            `${this.path}/:postId`,
             this.getOne)
        
         //Create a new post
@@ -34,9 +34,14 @@ class PostController implements Controller {
 
         //Update a post
         this.router.put(
-            `${this.path}/:id`,
+            `${this.path}/:postId`,
             validationMiddleware(validate.update),
-            this.update);    
+            this.update);
+            
+        //Delete a post
+        this.router.delete(
+            `${this.path}/:postId`,
+            this.delete);    
     }
 
     //Get all posts
@@ -59,8 +64,8 @@ class PostController implements Controller {
         next: NextFunction
         ): Promise<void> => {
         try {
-            const { id } = request.params;
-            const post = await this.PostService.getOne(id);
+            const _id  = request.params.postId;
+            const post = await this.PostService.getOne(_id);
             response.status(200).json({ post });
         } catch (error: any) {
             next(new HttpException(400, error.message));
@@ -74,8 +79,8 @@ class PostController implements Controller {
         ): Promise<void> => {
         try {
             const { title, body } = request.body;
-            const createdPost = await this.PostService.create( title, body );
-            response.status(201).json({ createdPost });
+            const post = await this.PostService.create( title, body );
+            response.status(201).json({ post });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
@@ -88,15 +93,28 @@ class PostController implements Controller {
         next: NextFunction
         ): Promise<void> => {
         try {
-            const { _id } = request.params;
+            const  _id  = request.params.postId;
             const { title, body } = request.body;
-            const updatedPost = await this.PostService.update(_id, title, body);
-            response.status(200).json({ updatedPost });
+            const post = await this.PostService.update(_id, title, body);
+            response.status(201).json({ post });
         } catch (error: any) {
             next(new HttpException(400, error.message));
         }
     }
 
+    private delete = async (
+        request: Request,
+        response: Response,
+        next: NextFunction
+        ): Promise<void> => {
+        try {
+            const _id = request.params.postId;
+            const post = await this.PostService.delete(_id);
+            response.status(201).json({ post });
+        } catch (error: any) {
+            next(new HttpException(400, error.message));
+        }
+    }
 }
 
 export default PostController;
