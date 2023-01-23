@@ -31,10 +31,10 @@ class PostService {
     */
     public create = async (
         title: string, 
-        body: string
+        content: string
         ): Promise<IPost> => {
         try {
-            const post = await this.post.create({ title, body });
+            const post = await this.post.create({ title, content });
             return post;
         } catch (error) {
             throw new Error("Unable to create the post");
@@ -47,10 +47,10 @@ class PostService {
     public update = async (
         _id: string, 
         title: string, 
-        body: string
+        content: string
         ): Promise<IPost> => {
         try {
-            const post = await this.post.findByIdAndUpdate(_id, { title, body}, { new: true });
+            const post = await this.post.findByIdAndUpdate(_id, { title, content}, { new: true });
             return post!; // ! is used to tell the compiler that the post is not null
         } catch (error) {
             throw new Error("Unable to update the post");

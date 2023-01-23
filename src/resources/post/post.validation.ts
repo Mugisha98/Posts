@@ -2,12 +2,12 @@ import Joi from 'joi';
 
 const create = Joi.object({
     title: Joi.string().required(),
-    body: Joi.string().required()
+    content: Joi.string().required()
 });
 
 const update = Joi.object({
     title: Joi.string(),
-    body: Joi.string()
+    content: Joi.string()
 });
 
 export default {

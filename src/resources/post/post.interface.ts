@@ -2,6 +2,6 @@ import { Document } from 'mongoose';
 
 interface Post extends Document {
     title: string;
-    body: string;
+    content: string;
 }
 export default Post;

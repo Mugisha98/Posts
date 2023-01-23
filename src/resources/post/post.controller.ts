@@ -78,8 +78,8 @@ class PostController implements Controller {
         next: NextFunction
         ): Promise<void> => {
         try {
-            const { title, body } = request.body;
-            const post = await this.PostService.create( title, body );
+            const { title, content } = request.body;
+            const post = await this.PostService.create( title, content );
             response.status(201).json({ post });
         } catch (error: any) {
             next(new HttpException(400, error.message));
@@ -94,8 +94,8 @@ class PostController implements Controller {
         ): Promise<void> => {
         try {
             const  _id  = request.params.postId;
-            const { title, body } = request.body;
-            const post = await this.PostService.update(_id, title, body);
+            const { title, content } = request.body;
+            const post = await this.PostService.update(_id, title, content);
             response.status(201).json({ post });
         } catch (error: any) {
             next(new HttpException(400, error.message));

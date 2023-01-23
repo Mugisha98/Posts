@@ -1,6 +1,5 @@
 import UserModel from '@/resources/user/user.model';
 import token from '@/utils/token';
-import { rootCertificates } from 'tls';
 
 class UserService {
     private user = UserModel;

@@ -14,7 +14,7 @@ export const verifyToken =  async (token: string): Promise<jwt.VerifyErrors | To
             if (err) return reject(err);
             resolve(payload as Token);
         });
-    });
+    });   
 }
 
 export default { createToken, verifyToken };
