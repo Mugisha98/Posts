@@ -4,6 +4,7 @@ import HttpException from "@/utils/exceptions/http.exception";
 import validationMiddleware from "@/middleware/validation.middleware";
 import validate from "@/resources/post/post.validation";
 import PostService from "@/resources/post/post.service";
+import auth from "@/middleware/auth.middleware";
 
 
 class PostController implements Controller {
@@ -19,29 +20,35 @@ class PostController implements Controller {
         //Get all posts
         this.router.get(
             `${this.path}`,
-            this.getAll);
+            this.getAll
+            );
 
         //get one post by id
         this.router.get(
             `${this.path}/:postId`,
-            this.getOne)
+            this.getOne
+            )
        
         //Create a new post
         this.router.post(
             `${this.path}`, 
             validationMiddleware(validate.create), 
-            this.create);
+            this.create
+            );
 
         //Update a post
         this.router.put(
             `${this.path}/:postId`,
             validationMiddleware(validate.update),
-            this.update);
+            this.update
+            );
             
         //Delete a post
         this.router.delete(
             `${this.path}/:postId`,
-            this.delete);    
+            auth,
+            this.delete
+            );    
     }
 
     //Get all posts
@@ -102,12 +109,18 @@ class PostController implements Controller {
         }
     }
 
+    //Delete a post
     private delete = async (
         request: Request,
         response: Response,
         next: NextFunction
-        ): Promise<void> => {
+        ): Promise<Response | void> => {
         try {
+            if( request.user){
+                response.status(200).json({ user: request.user });
+            }else{
+                next(new HttpException(400, "Unauthorized"));
+            }
             const _id = request.params.postId;
             const post = await this.PostService.delete(_id);
             response.status(201).json({ post });
